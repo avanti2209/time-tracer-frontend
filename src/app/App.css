@@ -4,19 +4,80 @@
   padding: 20px 15px;
   width: 300px;
   display: inline-block;
+  box-sizing: border-box;
 }
 
-.app-shell h3 {
-  margin: 0 0 10px 0;
+.app-shell input {
+  height: 20px;
+  border: 1px solid #777777;
+  font-weight: 400;
+  font-size: 12px;
 }
+
+.app-shell header {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.app-shell header .input-field {
+  width: 100px;
+  display: inline-block;
+}
+
+.app-shell header .input-field input {
+  width: 100%;
+  font-size: 14px;
+}
+
+.app-shell header h3 {
+  margin: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .task-shell h5 {
   margin: 10px 0;
 }
 
-.app-shell .user-shell {
+.new-task-shell {
+  margin-bottom: 10px;
+}
+
+.new-task-shell .form {
   background: #eeeeee;
   padding: 10px;
-  
+}
+.new-task-shell .form .form-fields {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.new-task-shell .form .form-actions {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.new-task-shell .form .form-fields .input-field {
+  width: 48%;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.new-task-shell .form .droop {
+  width: 119px;
+  line-height: 19px;
+}
+
+.new-task-shell .form .input-field input {
+  width: 100%;
+  display: inline-block;
+}
+
+.app-shell .new-task-shell .btn-link  {
+  margin: 0;
+  padding: 0;
 }
 
 .task-shell .task {
@@ -52,7 +113,7 @@
   margin-top: 5px;
   display: flex;
   font-size: 12px;
-  color: #0074ed;
+  color: #005ec1;
 }
 
 .task-shell .task .actions span {
@@ -63,19 +124,19 @@
 
 .app-shell .btn-primary {
   cursor: pointer;
-  background-color: #0074ed;
+  background-color: #005ec1;
   color: white;
-  height: 30px;
+  height: 26px;
   outline: none;
   border: none;
-  width: 90px;
+  padding: 5px 15px;
 }
 .app-shell .btn-link {
   cursor: pointer;
-  color: #0074ed;
+  color: #005ec1;
   background: transparent;
   outline: none;
   border: none;
-  margin-left: 20px;
+  padding: 0;
 }
 

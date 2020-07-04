@@ -1,6 +1,7 @@
 /**global chrome */
 import React from 'react';
 import './App.css';
+import Dropdown from './dropdown/dropdown';
 
 function timer(element) {
 
@@ -76,12 +77,14 @@ function timer(element) {
 
 }
 
-
 export default class App extends React.Component {
 
   constructor() {
     super(...arguments);
     this.state = {
+      form: {
+
+      },
       tasks: {
         0: {
           label: '',
@@ -90,7 +93,13 @@ export default class App extends React.Component {
           labelError: '',
           isCompleted: false
         }
-      }
+      },
+      options: [
+        { label: 'AAA', active: false },
+        { label: 'BBB', active: false },
+        { label: 'CCC', active: false }
+      ],
+      noOfTask: 0
     }
   }
 
@@ -189,52 +198,157 @@ export default class App extends React.Component {
     console.log('submit is click');
   }
 
+  onEmpIdChange(e) {
+    const value = e.target.value;
+    this.setState({
+      empId: value
+    });
+  }
+
+  onFormFieldChange(name, event) {
+    if (name === 'wbs') {
+      this.setState({
+        options: event
+      });
+    } else {
+      this.setState({
+        form: {
+          ...this.state.form,
+          [name]: event.target.value
+        }
+      })
+    }
+  }
+
   render() {
     return <div className='app-shell'>
 
-      <h3>Time Tracer</h3>
+      <header className='header'>
+        <h3>Time Tracer</h3>
+        <div className='input-field'>
+          <input id='empId'
+            ref={(node) => { this.empIdRef = node;}}
+            onChange={this.onEmpIdChange.bind(this)}
+            placeholder="Employee Id" />
+        </div>
+      </header>
 
-      <section className='user-shell'>
-        User Authentication Section
-      </section>
 
-      <section className='task-shell'>
-        <h5>Your Tasks</h5>
+      <section className='new-task-shell'>
         {
-          Object.values(this.state.tasks).map((task, index) => {
-            return <div className='task' key={index}>
-              <div className='task-view'>
+          this.state.showForm ?
+            <div className='form'>
+
+              <div className='form-fields'>
                 <div className='input-field'>
                   <input
-                    id={`task${index}`}
+                    name="task"
                     type='text'
-                    placeholder={`Task ${index}`}
-                    value={task.label}
-                    onChange={this.updateTaskLabel.bind(this, index)}
+                    placeholder="Task Name"
+                    maxLength="20"
+                    onChange={this.onFormFieldChange.bind(this, 'task')}
                   />
                 </div>
-                <div className='task-counter' id={`tc${index}`}>
-                  00:00:00
+
+                <div className='input-field'>
+                  <input
+                    name="team"
+                    type='text'
+                    placeholder="Team"
+                    maxLength="20"
+                    onChange={this.onFormFieldChange.bind(this, 'team')}
+                  />
                 </div>
+
+                <div className='input-field'>
+                  <input
+                    name="client"
+                    type='text'
+                    placeholder="Client"
+                    maxLength="20"
+                    onChange={this.onFormFieldChange.bind(this, 'client')}
+                  />
+                </div>
+
+                <div className='input-field'>
+                  <Dropdown 
+                    name='wbs'
+                    placeHolder="WBS"
+                    options={this.state.options}
+                    onChange={this.onFormFieldChange.bind(this, 'wbs')} />
+                </div>
+
               </div>
-              <div className='actions'>
-                <span onClick={this.startTimer.bind(this, index)}>Start</span>
-                <span onClick={this.pauseTimer.bind(this, index)}>Pause</span>
-                <span onClick={this.resetTimer.bind(this, index)}>Reset</span>
-                <span onClick={this.completeTask.bind(this, index)}>Complete</span>
+
+              <div className='form-actions'>
+                <button className='btn-primary' onClick={this.addTask.bind(this)}>
+                  Add Task
+                </button>
               </div>
+
             </div>
-          })
+            :
+            <button className='btn-link'
+              onClick={() => {
+                this.setState({
+                  form: {},
+                  showForm: true
+                });
+              }}>
+              Add a new task
+            </button>
         }
+        
       </section>
 
-      <button className='btn-primary' onClick={this.submit.bind(this)}>
-        Submit
-      </button>
+      {
+        this.state.noOfTask ?
+        <section className='task-shell'>
+          <h5>Your Tasks</h5>
+          {
+            Object.values(this.state.tasks).map((task, index) => {
+              return <div className='task' key={index}>
+                <div className='task-view'>
+                  <div className='input-field'>
+                    <input
+                      id={`task${index}`}
+                      type='text'
+                      placeholder={`Task ${index}`}
+                      value={task.label}
+                      onChange={this.updateTaskLabel.bind(this, index)}
+                    />
+                  </div>
+                  <div className='task-counter' id={`tc${index}`}>
+                    00:00:00
+                  </div>
+                </div>
+                <div className='actions'>
+                  <span onClick={this.startTimer.bind(this, index)}>Start</span>
+                  <span onClick={this.pauseTimer.bind(this, index)}>Pause</span>
+                  <span onClick={this.resetTimer.bind(this, index)}>Reset</span>
+                  <span onClick={this.completeTask.bind(this, index)}>Complete</span>
+                </div>
+              </div>
+            })
+          }
+        </section>
+        :
+        null
+      }
 
-      <button className='btn-link' onClick={this.addTask.bind(this)}>
-        Add Task
-      </button>
+      <div className='footer'>
+        {
+          this.state.noOfTask ?
+            <button className='btn-primary' onClick={this.submit.bind(this)}>
+              Submit Tasks
+            </button>
+            :
+            null
+        }
+        <button className='btn-link' onClick={this.addTask.bind(this)}>
+          Update Old Task?
+        </button>
+      </div>
       
     </div>
   }
